@@ -8,9 +8,15 @@
     <artifactId>gb-java-ee</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <packaging>pom</packaging>
+
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
+    <modules>
+        <module>first-web-app</module>
+    </modules>
 
 </project>
