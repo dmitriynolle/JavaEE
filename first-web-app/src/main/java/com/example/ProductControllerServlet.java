@@ -30,7 +30,8 @@ public class ProductControllerServlet extends HttpServlet {
         if (req.getPathInfo() == null || req.getPathInfo().equals("/")) {
             req.setAttribute("products", productRepository.findAll());
             getServletContext().getRequestDispatcher("/WEB-INF/views/products.jsp").forward(req, resp);
-        } if (req.getPathInfo().equals("/new")) {
+        }
+        if (req.getPathInfo().equals("/new")) {
             // TODO
             getServletContext().getRequestDispatcher("/WEB-INF/views/product_form.jsp").forward(req, resp);
         } else {
@@ -55,13 +56,18 @@ public class ProductControllerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getPathInfo() == null || req.getPathInfo().equals("/")) {
-            String strId = req.getParameter("id");
+            Long longId;
             try {
-                // TODO
-                Product product = new Product(Long.parseLong(strId),
+                if (req.getParameter("id").isEmpty() && !req.getParameter("name").isEmpty()) {
+                    longId = null;
+                } else {
+                    longId = Long.parseLong(req.getParameter("id"));
+                }
+                Product product = new Product(longId,
                         req.getParameter("name"),
                         new BigDecimal(req.getParameter("price")));
                 productRepository.save(product);
+
                 resp.sendRedirect(getServletContext().getContextPath() + "/product");
             } catch (NumberFormatException ex) {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
