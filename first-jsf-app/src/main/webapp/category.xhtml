@@ -23,7 +23,39 @@
     </ui:include>
 
     <div class="container">
-        Categories
+        <div class="col-md-9 col-xs-12">
+            <h:form id="categoryTable">
+                <h:commandButton value="Add category" styleClass="btn btn-primary my-2"
+                                 action="#{categoryController.addCategory()}"/>
+
+                <h:dataTable value="#{categoryController.findAll()}" var="category"
+                             styleClass="table table-bordered">
+                    <h:column>
+                        <f:facet name="header">Id</f:facet>
+                        #{category.id}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Name</f:facet>
+                        #{category.name}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Description</f:facet>
+                        #{category.description}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Action</f:facet>
+
+                        <h:commandButton value="Edit" styleClass="btn btn-success mr-2"
+                                         action="#{categoryController.editCategory(category)}"/>
+                        <h:commandButton value="Delete" styleClass="btn btn-danger"
+                                         action="#{categoryController.deleteCategory(category)}">
+                            <f:ajax event="click" render="categoryTable"/>
+                        </h:commandButton>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+
+        </div>
     </div>
 
     <!-- Optional JavaScript -->
