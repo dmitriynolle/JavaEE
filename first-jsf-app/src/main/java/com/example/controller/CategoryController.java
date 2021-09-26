@@ -42,7 +42,7 @@ public class CategoryController implements Serializable {
         return "/category_form.xhtml?faces-redirect=true";
     }
 
-    public String savaCategory() {
+    public String saveCategory() {
         categoryRepository.save(category);
         return "/category.xhtml?faces-redirect=true";
     }
