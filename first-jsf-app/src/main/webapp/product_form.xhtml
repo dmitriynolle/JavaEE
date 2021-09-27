@@ -2,7 +2,6 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:pp="http://primefaces.org/ui"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
 <h:head>
@@ -38,6 +37,17 @@
                         <h:inputText styleClass="form-control" p:type="number" id="price"
                                      value="#{productController.product.price}"
                                      placeholder="Enter price"/>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="Brand"/>
+                        <h:selectOneListbox size="1" styleClass="form-control" id="productBrand"
+                                            value="#{productController.product.brandId}">
+                            <f:selectItems value="#{productController.brands}"
+                                           var="br"
+                                           itemValue="#{br.id}"
+                                           itemLabel="#{br.name}"
+                                           itemLabelEscaped="true"/>
+                        </h:selectOneListbox>
                     </div>
                     <div class="form-group">
                         <h:outputLabel value="Category"/>

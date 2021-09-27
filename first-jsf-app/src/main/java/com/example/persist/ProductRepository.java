@@ -24,6 +24,13 @@ public class ProductRepository {
         return Optional.ofNullable(em.find(Product.class, id));
     }
 
+    public List<Product> findByCategoryId(long id) {
+        List<Product>prod = em.createQuery("from Product where category.id = :id", Product.class)
+                .setParameter("id", id)
+                .getResultList();
+        return prod;
+    }
+
     @Transactional
     public Product save(Product product) {
         if (product.getId() == null) {

@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.persist.BrandRepository;
 import com.example.persist.CategoryRepository;
 import com.example.persist.Product;
 import com.example.persist.ProductRepository;
@@ -25,19 +26,28 @@ public class ProductService {
     @Inject
     private CategoryRepository categoryRepository;
 
+    @Inject
+    private BrandRepository brandRepository;
+
     @PostConstruct
     public void init() {
         if (productRepository.count() == 0) {
-            productRepository.save(new Product(null, "Product 1", new BigDecimal(100), null));
-            productRepository.save(new Product(null, "Product 2", new BigDecimal(200), null));
-            productRepository.save(new Product(null, "Product 3", new BigDecimal(300), null));
-            productRepository.save(new Product(null, "Продукт 4", new BigDecimal(300), null));
+            productRepository.save(new Product(null, "Product 1", new BigDecimal(100), null, null));
+            productRepository.save(new Product(null, "Product 2", new BigDecimal(200), null, null));
+            productRepository.save(new Product(null, "Product 3", new BigDecimal(300), null, null));
+            productRepository.save(new Product(null, "Продукт 4", new BigDecimal(300), null, null));
         }
     }
 
     @Transactional
     public List<ProductDto> findAll() {
         return productRepository.findAll().stream()
+                .map(ProductService::convert)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductDto> findByCategoryId(long id) {
+        return productRepository.findByCategoryId(id).stream()
                 .map(ProductService::convert)
                 .collect(Collectors.toList());
     }
@@ -53,6 +63,7 @@ public class ProductService {
                 productDto.getId(),
                 productDto.getName(),
                 productDto.getPrice(),
+                brandRepository.getReference(productDto.getBrandId()),
                 categoryRepository.getReference(productDto.getCategoryId())
         );
         return productRepository.save(product);
@@ -72,6 +83,8 @@ public class ProductService {
                 prod.getId(),
                 prod.getName(),
                 prod.getPrice(),
+                prod.getBrand() != null ? prod.getBrand().getId() : null,
+                prod.getBrand() != null ? prod.getBrand().getName() : null,
                 prod.getCategory() != null ? prod.getCategory().getId() : null,
                 prod.getCategory() != null ? prod.getCategory().getName() : null
         );

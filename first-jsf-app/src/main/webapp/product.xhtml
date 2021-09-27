@@ -28,7 +28,7 @@
         <div class="row py-2">
             <div class="col-md-3 col-xs-12">
                 <ui:repeat value="#{productController.categories}" var="cat">
-                    <h:link styleClass="list-group-item list-group-item-action active" value="#{cat.name}" outcome="/product">
+                    <h:link styleClass="list-group-item list-group-item-action #{param['categoryId'] == cat.id ? 'active' : ''}" value="#{cat.name}" outcome="/product">
                         <f:param name="categoryId" value="#{cat.id}"/>
                     </h:link>
                 </ui:repeat>
@@ -39,7 +39,7 @@
                     <h:commandButton value="Add product" styleClass="btn btn-primary my-2"
                                      action="#{productController.addProduct()}"/>
 
-                    <h:dataTable value="#{productController.findAll()}" var="product"
+                    <h:dataTable value="#{param['categoryId'] == null ? productController.findAll() : productController.findByCategoryId(param['categoryId'])}" var="product"
                                  styleClass="table table-bordered">
                         <h:column>
                             <f:facet name="header">Id</f:facet>
@@ -52,6 +52,10 @@
                         <h:column>
                             <f:facet name="header">Price</f:facet>
                             #{product.price}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Brand</f:facet>
+                            #{product.brandName}
                         </h:column>
                         <h:column>
                             <f:facet name="header">Category</f:facet>
