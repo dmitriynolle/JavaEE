@@ -1,7 +1,6 @@
 package com.example.controller;
 
-import com.example.persist.Category;
-import com.example.persist.CategoryRepository;
+import com.example.persist.*;
 import com.example.service.ProductService;
 import com.example.service.dto.ProductDto;
 import org.slf4j.Logger;
@@ -28,11 +27,16 @@ public class ProductController implements Serializable {
     private CategoryRepository categoryRepository;
 
     @Inject
+    private BrandRepository brandRepository;
+
+    @Inject
     private HttpServletRequest request;
 
     private List<ProductDto> products;
 
     private List<Category> categories;
+
+    private List<Brand> brands;
 
     private ProductDto product;
 
@@ -40,6 +44,7 @@ public class ProductController implements Serializable {
         logger.info("categoryId param: {}", request.getParameter("categoryId"));
         this.products = productService.findAll();
         this.categories = categoryRepository.findAll();
+        this.brands = brandRepository.findAll();
     }
 
     public ProductDto getProduct() {
@@ -52,6 +57,10 @@ public class ProductController implements Serializable {
 
     public List<ProductDto> findAll() {
         return products;
+    }
+
+    public List<ProductDto> findByCategoryId(Long id) {
+        return productService.findByCategoryId(id);
     }
 
     public String editProduct(ProductDto product) {
@@ -75,5 +84,9 @@ public class ProductController implements Serializable {
 
     public List<Category> getCategories() {
         return categories;
+    }
+
+    public List<Brand> getBrands() {
+        return brands;
     }
 }
