@@ -1,11 +1,15 @@
 package com.example.controller;
 
-import com.example.persist.*;
+import com.example.persist.Brand;
+import com.example.persist.BrandRepository;
+import com.example.persist.Category;
+import com.example.persist.CategoryRepository;
 import com.example.service.ProductService;
 import com.example.service.dto.ProductDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
@@ -20,13 +24,13 @@ public class ProductController implements Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-    @Inject
+    @EJB
     private ProductService productService;
 
-    @Inject
+    @EJB
     private CategoryRepository categoryRepository;
 
-    @Inject
+    @EJB
     private BrandRepository brandRepository;
 
     @Inject
@@ -41,10 +45,18 @@ public class ProductController implements Serializable {
     private ProductDto product;
 
     public void preloadData(ComponentSystemEvent componentSystemEvent) {
-        logger.info("categoryId param: {}", request.getParameter("categoryId"));
-        this.products = productService.findAll();
+        logger.info("categoryId param: {}", getCategoryIdFilter());
+        if (getCategoryIdFilter() != null ) {
+            this.products = productService.findByCategoryId(Long.parseLong(getCategoryIdFilter()));
+        } else {
+            this.products = productService.findAll();
+        }
         this.categories = categoryRepository.findAll();
         this.brands = brandRepository.findAll();
+    }
+
+    public String getCategoryIdFilter() {
+        return request.getParameter("categoryId");
     }
 
     public ProductDto getProduct() {

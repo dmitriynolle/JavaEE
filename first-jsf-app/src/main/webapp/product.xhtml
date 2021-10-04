@@ -27,11 +27,14 @@
 
         <div class="row py-2">
             <div class="col-md-3 col-xs-12">
-                <ui:repeat value="#{productController.categories}" var="cat">
-                    <h:link styleClass="list-group-item list-group-item-action #{param['categoryId'] == cat.id ? 'active' : ''}" value="#{cat.name}" outcome="/product">
-                        <f:param name="categoryId" value="#{cat.id}"/>
-                    </h:link>
-                </ui:repeat>
+                <div class="list-group my-2">
+                    <ui:repeat value="#{productController.categories}" var="cat">
+                        <h:link styleClass="list-group-item list-group-item-action #{cat.id == productController.categoryIdFilter ? 'active' : ''}"
+                                value="#{cat.name}" outcome="/product">
+                            <f:param name="categoryId" value="#{cat.id}"/>
+                        </h:link>
+                    </ui:repeat>
+                </div>
             </div>
 
             <div class="col-md-9 col-xs-12">
@@ -39,7 +42,7 @@
                     <h:commandButton value="Add product" styleClass="btn btn-primary my-2"
                                      action="#{productController.addProduct()}"/>
 
-                    <h:dataTable value="#{param['categoryId'] == null ? productController.findAll() : productController.findByCategoryId(param['categoryId'])}" var="product"
+                    <h:dataTable value="#{productController.findAll()}" var="product"
                                  styleClass="table table-bordered">
                         <h:column>
                             <f:facet name="header">Id</f:facet>
@@ -66,9 +69,12 @@
 
                             <h:commandButton value="Edit" styleClass="btn btn-success mr-2"
                                              action="#{productController.editProduct(product)}"/>
-                            <h:commandButton value="Delete" styleClass="btn btn-danger"
+                            <h:commandButton value="Delete" styleClass="btn btn-danger mr-2"
                                              action="#{productController.deleteProduct(product)}">
                                 <f:ajax event="click" render="productTable"/>
+                            </h:commandButton>
+                            <h:commandButton value="Add to Cart" styleClass="btn btn-success"
+                                             action="#{cartController.addToCart(product)}">
                             </h:commandButton>
                         </h:column>
                     </h:dataTable>

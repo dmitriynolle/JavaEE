@@ -1,19 +1,22 @@
 package com.example.persist;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@ApplicationScoped
-@Named
+@Stateless
 public class ProductRepository {
 
     @PersistenceContext(unitName = "ds")
     private EntityManager em;
+
+//    EntityGraph<?> eg = em.getEntityGraph("product-with-category-graph");
 
     public List<Product> findAll() {
         return em.createQuery("from Product", Product.class)
@@ -25,13 +28,11 @@ public class ProductRepository {
     }
 
     public List<Product> findByCategoryId(long id) {
-        List<Product>prod = em.createQuery("from Product where category.id = :id", Product.class)
+        return em.createQuery("from Product p where p.category.id = :id", Product.class)
                 .setParameter("id", id)
                 .getResultList();
-        return prod;
     }
 
-    @Transactional
     public Product save(Product product) {
         if (product.getId() == null) {
             em.persist(product);

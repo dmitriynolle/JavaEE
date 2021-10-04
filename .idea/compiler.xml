@@ -10,5 +10,9 @@
         <module name="first-jsf-app" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="client" target="11" />
+      <module name="product-api" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

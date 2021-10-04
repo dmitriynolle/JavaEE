@@ -6,40 +6,26 @@ import com.example.persist.Product;
 import com.example.persist.ProductRepository;
 import com.example.service.dto.ProductDto;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
-@Named
+@Stateless
 public class ProductService {
 
-    @Inject
+    @EJB
     private ProductRepository productRepository;
 
-    @Inject
+    @EJB
     private CategoryRepository categoryRepository;
 
-    @Inject
+    @EJB
     private BrandRepository brandRepository;
 
-    @PostConstruct
-    public void init() {
-        if (productRepository.count() == 0) {
-            productRepository.save(new Product(null, "Product 1", new BigDecimal(100), null, null));
-            productRepository.save(new Product(null, "Product 2", new BigDecimal(200), null, null));
-            productRepository.save(new Product(null, "Product 3", new BigDecimal(300), null, null));
-            productRepository.save(new Product(null, "Продукт 4", new BigDecimal(300), null, null));
-        }
-    }
-
-    @Transactional
     public List<ProductDto> findAll() {
         return productRepository.findAll().stream()
                 .map(ProductService::convert)
@@ -57,7 +43,7 @@ public class ProductService {
                 .map(ProductService::convert);
     }
 
-    @Transactional
+    @TransactionAttribute
     public Product save(ProductDto productDto) {
         Product product = new Product(
                 productDto.getId(),
@@ -69,7 +55,7 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    @Transactional
+    @TransactionAttribute
     public void delete(long id) {
         productRepository.delete(id);
     }
