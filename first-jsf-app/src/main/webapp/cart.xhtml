@@ -23,7 +23,35 @@
     </ui:include>
 
     <div class="container">
-        Cart
+        <div class="col-md-9 col-xs-12">
+            <h:form id="cartTable">
+
+                <h:dataTable value="#{cartController.findAll()}" var="cart"
+                             styleClass="table table-bordered">
+                    <h:column>
+                        <f:facet name="header">Name</f:facet>
+                        #{cart.product.name}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Qty</f:facet>
+                        #{cart.qty}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Price</f:facet>
+                        #{cart.price}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Action</f:facet>
+
+                        <h:commandButton value="Delete" styleClass="btn btn-danger"
+                                         action="#{cartController.removeProduct(cart.product)}">
+<!--                            <f:ajax event="click" render="cartTable"/>-->
+                        </h:commandButton>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+
+        </div>
     </div>
 
     <!-- Optional JavaScript -->
